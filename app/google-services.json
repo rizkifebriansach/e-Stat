@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "82341990160",
+    "project_id": "e-statsi",
+    "storage_bucket": "e-statsi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:82341990160:android:60c4c428bc2f7e97c55f95",
+        "android_client_info": {
+          "package_name": "com.rfapp.e_statsi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "82341990160-hnr5v719108lchd06ngcbetnq8o3luav.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rfapp.e_statsi",
+            "certificate_hash": "5e58b6a719fe77ba53c756464fb36c530c0d4882"
+          }
+        },
+        {
+          "client_id": "82341990160-5nhp34c4dn9is7jmj9cukatvv8mfiqrk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7ahAmt4vLHVgzeLENT24hiE_l_qAI1mI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "82341990160-5nhp34c4dn9is7jmj9cukatvv8mfiqrk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
