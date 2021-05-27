@@ -7,31 +7,60 @@ import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.rfapp.e_statsi.DetailActivity
-import com.rfapp.e_statsi.HomeActivity
 import com.rfapp.e_statsi.R
 import com.rfapp.e_statsi.model.Berkas
-import java.io.File
-import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
-class HomeAdapter(var data: List<Berkas>, private val listener: (Berkas) -> Unit) : RecyclerView.Adapter<HomeAdapter.ViewHolder>(){
+class HomeAdapter(private var data: MutableList<Berkas>, private val listener: (Berkas) -> Unit) : RecyclerView.Adapter<HomeAdapter.ViewHolder>(), Filterable{
 
     private lateinit var contextAdapter : Context
     private lateinit var sReference : StorageReference
+    private  var filterList : ArrayList<Berkas>
+
+    init {
+        filterList = data as ArrayList<Berkas>
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter(){
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val charSearch = constraint.toString()
+                if (charSearch.isEmpty()){
+                    filterList = data as ArrayList<Berkas>
+                }else{
+                    val resultList = ArrayList<Berkas>()
+                    for (row in data){
+                        if (row.nama!!.toLowerCase(Locale.ROOT).contains(constraint.toString().toLowerCase(
+                                Locale.ROOT))){
+                            resultList.add(row)
+                        }
+                    }
+                    filterList = resultList
+                }
+
+                val filterResult = FilterResults()
+                filterResult.values = filterList
+                return filterResult
+            }
+
+            @Suppress("UNCHECKED_CAST")
+            override fun publishResults(constarint: CharSequence?, result: FilterResults?) {
+                filterList = result?.values as ArrayList<Berkas>
+                notifyDataSetChanged()
+            }
+
+        }
+    }
 
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view){
-        private lateinit var sReference : StorageReference
-        private lateinit var reference: StorageReference
-        var dataList = ArrayList<Berkas>()
 
         val tvNama:TextView = view.findViewById(R.id.tv_nama)
         val tvLink:TextView = view.findViewById(R.id.tv_link)
@@ -74,10 +103,11 @@ class HomeAdapter(var data: List<Berkas>, private val listener: (Berkas) -> Unit
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       holder.bindItem(data[position], listener, contextAdapter, position)
+       holder.bindItem(filterList[position], listener, contextAdapter, position)
     }
 
     override fun getItemCount(): Int {
-        return data.size
+        return filterList.size
     }
+
 }
