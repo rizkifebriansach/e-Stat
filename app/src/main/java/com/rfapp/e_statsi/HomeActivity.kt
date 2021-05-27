@@ -32,8 +32,7 @@ class HomeActivity : AppCompatActivity() {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
-                adapter?.filter?.filter(query)
-                return true
+                return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {

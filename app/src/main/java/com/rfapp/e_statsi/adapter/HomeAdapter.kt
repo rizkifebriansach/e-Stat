@@ -103,7 +103,7 @@ class HomeAdapter(private var data: MutableList<Berkas>, private val listener: (
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       holder.bindItem(filterList[position], listener, contextAdapter, position)
+       holder.bindItem(filterList[position],listener, contextAdapter, position)
     }
 
     override fun getItemCount(): Int {
