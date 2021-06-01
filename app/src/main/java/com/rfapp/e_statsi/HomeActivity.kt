@@ -10,6 +10,8 @@ import com.google.firebase.database.*
 import com.rfapp.e_statsi.adapter.HomeAdapter
 import com.rfapp.e_statsi.model.Berkas
 import kotlinx.android.synthetic.main.activity_home.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class HomeActivity : AppCompatActivity() {
 
@@ -82,7 +84,8 @@ class HomeActivity : AppCompatActivity() {
                     for (userSnapshot in snapshot.children) {
                         val userModel = userSnapshot.getValue(Berkas::class.java)
 
-                        if (userModel?.nama!!.toLowerCase().contains(searchText.toLowerCase())){
+                        if (userModel?.nama!!.toLowerCase(Locale.ROOT).contains(searchText.toLowerCase(
+                                Locale.ROOT))){
                             dataArrayList.add(userModel)
                         }
                     }
