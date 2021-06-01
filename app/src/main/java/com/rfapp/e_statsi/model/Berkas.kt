@@ -5,6 +5,11 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Berkas (
-    var nama:String? = "",
-    var data_url:String? = "",
-): Parcelable
+
+    var nama:String? = null,
+    var data_url:String? = null
+
+):Parcelable
+
+
+

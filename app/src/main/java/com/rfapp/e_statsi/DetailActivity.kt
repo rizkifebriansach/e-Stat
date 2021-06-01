@@ -40,7 +40,7 @@ class DetailActivity : AppCompatActivity() {
                 val url = URL(params[0])
                 val httpURLConnection = url.openConnection() as HttpURLConnection
 
-                if (httpURLConnection.responseCode == 200){
+               if (httpURLConnection.responseCode == 200){
                     val stream = BufferedInputStream(httpURLConnection.inputStream)
                     progressBar.visibility = View.VISIBLE
                     return stream
@@ -55,9 +55,9 @@ class DetailActivity : AppCompatActivity() {
         override fun onPostExecute(result: InputStream?) {
             pdf_view.fromStream(result).load()
             progressBar.visibility = View.GONE
-        }
+       }
 
-    }
+   }
 
 
 }

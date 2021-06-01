@@ -25,6 +25,7 @@ class HomeAdapter(private var data: MutableList<Berkas>, private val listener: (
     private lateinit var sReference : StorageReference
     private  var filterList : ArrayList<Berkas>
 
+
     init {
         filterList = data as ArrayList<Berkas>
     }
@@ -53,7 +54,8 @@ class HomeAdapter(private var data: MutableList<Berkas>, private val listener: (
 
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constarint: CharSequence?, result: FilterResults?) {
-                filterList = result?.values as ArrayList<Berkas>
+                data.clear()
+                data.addAll(result?.values as ArrayList<Berkas>)
                 notifyDataSetChanged()
             }
 
@@ -103,11 +105,11 @@ class HomeAdapter(private var data: MutableList<Berkas>, private val listener: (
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       holder.bindItem(filterList[position],listener, contextAdapter, position)
+       holder.bindItem(data[position],listener, contextAdapter, position)
     }
 
     override fun getItemCount(): Int {
-        return filterList.size
+        return data.size
     }
 
 }

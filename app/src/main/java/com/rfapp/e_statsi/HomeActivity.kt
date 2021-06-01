@@ -8,22 +8,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import com.rfapp.e_statsi.adapter.HomeAdapter
-import com.rfapp.e_statsi.databinding.ActivityMainBinding
 import com.rfapp.e_statsi.model.Berkas
 import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var databaseReference: DatabaseReference
-    private var dataRecyclerView: RecyclerView? = null
-    private var _binding: ActivityMainBinding? = null
-    private var adapter: HomeAdapter? = null
+    private  var dataRecyclerView: RecyclerView? = null
+    private  var adapter: HomeAdapter? = null
+    private lateinit var myList : ArrayList<Berkas>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_home)
-
+        val searchView = findViewById<SearchView>(R.id.searchView)
+        databaseReference = FirebaseDatabase.getInstance().getReference("Data")
         dataRecyclerView?.adapter = adapter
         dataRecyclerView = findViewById(R.id.rv_data)
         dataRecyclerView?.layoutManager = LinearLayoutManager(this)
@@ -35,9 +34,9 @@ class HomeActivity : AppCompatActivity() {
                 return false
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
+            override fun onQueryTextChange(newText: String): Boolean {
                 Log.d("onQueryTextChange", "query :"+newText)
-                adapter?.filter?.filter(newText)
+                firebaseSearch(newText)
                 return true
             }
 
@@ -45,7 +44,7 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
-    fun getData() {
+    private fun getData() {
         val dataArrayList = ArrayList<Berkas>()
         databaseReference = FirebaseDatabase.getInstance().getReference("Data")
         databaseReference.addValueEventListener(object : ValueEventListener{
@@ -58,7 +57,7 @@ class HomeActivity : AppCompatActivity() {
                     }
                 }
 
-                dataRecyclerView?.adapter = HomeAdapter(dataArrayList){
+                dataRecyclerView!!.adapter = HomeAdapter(dataArrayList){
                     val intent = Intent(this@HomeActivity, DetailActivity::class.java).putExtra("data", it)
                     startActivity(intent)
                 }
@@ -72,4 +71,36 @@ class HomeActivity : AppCompatActivity() {
         })
 
     }
+
+    private fun firebaseSearch(searchText : String){
+
+        val dataArrayList = ArrayList<Berkas>()
+        databaseReference = FirebaseDatabase.getInstance().getReference("Data")
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                    for (userSnapshot in snapshot.children) {
+                        val userModel = userSnapshot.getValue(Berkas::class.java)
+
+                        if (userModel?.nama!!.toLowerCase().contains(searchText.toLowerCase())){
+                            dataArrayList.add(userModel)
+                        }
+                    }
+
+
+                val userAdapter = HomeAdapter(dataArrayList){
+                    val intent = Intent(this@HomeActivity, DetailActivity::class.java).putExtra("data", it)
+                    startActivity(intent)
+                }
+                dataRecyclerView?.adapter = userAdapter
+                userAdapter.notifyDataSetChanged()
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
+    }
+
 }
